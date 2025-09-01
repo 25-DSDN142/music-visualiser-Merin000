@@ -9,7 +9,27 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
    let bar_spacing = height / 10;
    let bar_height = width / 12;
    let bar_pos_x = width / 2;
+
+   let circleSize = map(drum, 0, 100, 0, 255);
+  
+   //ellipse(200,300,circleSize);
+   //fill (200);
+
+
+   for (let i = 0; i < 5; i++) {
+      circle(50 + i * 80, 80, 50);  // circles
+    }
+  }
+   
+
+
  
+ 
+ 
+ 
+ 
+ 
+/*
 // changes 
    // vocal bar is red
    fill(200, 0, 0);
@@ -40,4 +60,4 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
    textAlign(CENTER);
    textSize(vocal);
    text(words, width/2, height/3);
-}
+} */
