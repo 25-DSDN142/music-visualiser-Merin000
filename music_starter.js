@@ -6,22 +6,48 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   rectMode(CENTER)
   textSize(24);
   
-   let bar_spacing = height / 10;
-   let bar_height = width / 12;
-   let bar_pos_x = width / 2;
+  let seasonLength = 500; // how many frames each season lasts (tweak this)
+  let totalCycle = seasonLength * 4;
+  let cyclePos = counter % totalCycle;
 
-   let circleSize = map(vocal, 0, 100, vocal, 255);
-  
-   noStroke();
-   ellipse(200,300,circleSize);
-   fill (255, 191, 0);
+  let season;
+  if (cyclePos < seasonLength) {
+    season = "winter";
+  } else if (cyclePos < seasonLength * 2) {
+    season = "spring";
+  } else if (cyclePos < seasonLength * 3) {
+    season = "summer";
+  } else {
+    season = "autumn";
+  }
 
-   let circleSize2 = map(bass,100,100,15,100);
+  // Draw background gradient for each season
+  if (season === "winter") {
+    // icy blue → snowy white
+    setGradient(color(160, 200, 255), color(240, 250, 255));
+  } else if (season === "spring") {
+    // pink blossom → light green
+    setGradient(color(255, 170, 200), color(180, 250, 200));
+  } else if (season === "summer") {
+    // sky blue → warm golden
+    setGradient(color(120, 200, 255), color(255, 220, 130));
+  } else if (season === "autumn") {
+    // orange → deep red-brown
+    setGradient(color(230, 150, 80), color(160, 60, 30));
+  }
+}
 
-   //ellipse(100,100,circleSize2);
-   //fill(255, 191, 0);
+// helper: vertical gradient background
+function setGradient(c1, c2) {
+  noFill();
+  for (let y = 0; y < height; y++) {
+    let inter = map(y, 0, height, 0, 1);
+    let c = lerpColor(c1, c2, inter);
+    stroke(c);
+    line(0, y, width, y);
+  }
 
 
-    }
+}
   
   
