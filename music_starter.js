@@ -63,16 +63,15 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
  if (seasonIndex === 3){
   drawAutumnLeaves();
  }
-
- drawEnd(100, 330, vocal);
-drawEnd(145, 330, vocal);
-drawEnd(140, 229, vocal);
-drawEnd(175, 235, vocal);
-drawEnd(240, 235, vocal);
-drawEnd(290, 275, vocal);
-drawEnd(340, 345, vocal);
-drawEnd(415, 280, vocal);
-drawEnd(450, 380, vocal);
+ drawEnd(100, 330, vocal, seasonIndex);
+ drawEnd(145, 330, vocal, seasonIndex);
+ drawEnd(140, 229, vocal, seasonIndex);
+ drawEnd(175, 235, vocal, seasonIndex);
+ drawEnd(240, 235, vocal, seasonIndex);
+ drawEnd(290, 275, vocal, seasonIndex);
+ drawEnd(340, 345, vocal, seasonIndex);
+ drawEnd(415, 280, vocal, seasonIndex);
+ drawEnd(450, 380, vocal, seasonIndex);
 
 
 
@@ -222,15 +221,25 @@ function drawSun( drum) {
   pop();
 }
 
-function drawEnd(x, y, vocal) {
-  // Map drum volume (0–100) to petal size
-  let basePetalSize = map(vocal, 0, 100, 10,30); // smaller at 0, bigger at 100
+function drawEnd(x, y, vocal, seasonIndex) {
+  // Map vocal volume (0–100) to petal size
+  let basePetalSize = map(vocal, 0, 100, 10, 40);
+
+  // Set petal color based on season
+  let petalColor;
+  switch(seasonIndex) {
+    case 0: petalColor = color(255); break;          // Winter - white
+    case 1: petalColor = color(255, 170, 200); break; // Spring - pink
+    case 2: petalColor = color(255, 220, 130); break; // Summer - light yellow/orange
+    case 3: petalColor = color(255, 140, 0); break;   // Autumn - orange
+    default: petalColor = color(255, 100, 0);
+  }
 
   push();
   translate(x, y);
 
   noStroke();
-  fill(255, 100, 0); // petals
+  fill(petalColor);
   ellipse(0, -basePetalSize / 2, basePetalSize, basePetalSize); // Top
   ellipse(0, basePetalSize / 2, basePetalSize, basePetalSize);  // Bottom
   ellipse(-basePetalSize / 2, 0, basePetalSize, basePetalSize); // Left
@@ -241,6 +250,7 @@ function drawEnd(x, y, vocal) {
 
   pop();
 }
+
 
 
 
