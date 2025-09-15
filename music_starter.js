@@ -35,20 +35,20 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   let nextIndex = (seasonIndex + 1) % 4;
 
-  // smooth transition between current and next season
-  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t * 0.3); // slow subtle transition
+  // transition between current and next season
+  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t * 0.3); 
   let c2 = lerpColor(bottomColors[seasonIndex], bottomColors[nextIndex], t* 0.3);
 
   setGradient(c1, c2);
 
-
-  //if (seasonIndex === 1 || seasonIndex === 2) {
-    drawSun( drum);
- //}
-
+  drawCloud(400, 90, drum); 
+  drawCloud(50, 90, drum); 
+ 
+  drawSun( drum);
 
   drawTree(); // tree in middle
-  // Snow only in winter
+
+  
   if (seasonIndex === 0) {
     drawSnow();
   }
@@ -63,6 +63,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
  if (seasonIndex === 3){
   drawAutumnLeaves();
  }
+
+ //draw flowers on tree
  drawEnd(100, 330, vocal, seasonIndex);
  drawEnd(145, 330, vocal, seasonIndex);
  drawEnd(140, 229, vocal, seasonIndex);
@@ -71,11 +73,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
  drawEnd(290, 275, vocal, seasonIndex);
  drawEnd(340, 345, vocal, seasonIndex);
  drawEnd(415, 280, vocal, seasonIndex);
- drawEnd(450, 380, vocal, seasonIndex);
-
-
-
-
+ drawEnd(460, 375, vocal, seasonIndex);
 
 // gradient background
 function setGradient(c1, c2) {
@@ -115,8 +113,6 @@ function drawSnow() {
   }
 }
 
-
-
 function drawFlower() {
   noStroke();
   fill(255, 170, 200);
@@ -132,7 +128,7 @@ function drawFlower() {
     });
   }
 
-  // draw the flower array, not snowflakes
+  // draw the flower array,
   for (let i = flower.length - 1; i >= 0; i--) {
     let f = flower[i];
     if (f.y > height) {
@@ -222,7 +218,7 @@ function drawSun( drum) {
 }
 
 function drawEnd(x, y, vocal, seasonIndex) {
-  // Map vocal volume (0–100) to petal size
+  // Map vocal volume 
   let basePetalSize = map(vocal, 0, 100, 10, 40);
 
   // Set petal color based on season
@@ -230,7 +226,7 @@ function drawEnd(x, y, vocal, seasonIndex) {
   switch(seasonIndex) {
     case 0: petalColor = color(255); break;          // Winter - white
     case 1: petalColor = color(255, 170, 200); break; // Spring - pink
-    case 2: petalColor = color(255, 220, 130); break; // Summer - light yellow/orange
+    case 2: petalColor = color(	0, 163, 108); break; // Summer - light yellow/orange
     case 3: petalColor = color(255, 140, 0); break;   // Autumn - orange
     default: petalColor = color(255, 100, 0);
   }
@@ -251,11 +247,21 @@ function drawEnd(x, y, vocal, seasonIndex) {
   pop();
 }
 
+function drawCloud(x, y, drum) {
+  noStroke();
+
+  // Map drum volume 
+  let scale = map(drum, 0, 100, 2, 0.5);
+  fill(255, 255, 255, 50);
 
 
-
-
-
+  // Main body of the cloud
+  ellipse(x, y, 40 * scale * 2, 40 * scale * 2);  // center
+  ellipse(x + 50 * scale, y - 20 * scale, 30 * scale * 2, 30 * scale * 2);
+  ellipse(x + 90 * scale, y, 45 * scale * 2, 45 * scale * 2);
+  ellipse(x + 40 * scale, y + 20 * scale, 35 * scale * 2, 35 * scale * 2);
+  ellipse(x - 20 * scale, y + 10 * scale, 30 * scale * 2, 30 * scale * 2);
+}
 // tree structure
 function drawTree() {
   stroke(80, 42, 42);
@@ -295,7 +301,4 @@ function drawTree() {
   line(width/2 - 30, height/2 - 250, width/2 - 50, height/2 -120);
 
 }
-
-
-
 }
