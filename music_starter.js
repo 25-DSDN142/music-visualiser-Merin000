@@ -1,43 +1,45 @@
 let snowflakes = [];
+let flower = [];
 
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
+let seasonLength = 1000; // frames per season
+let totalCycle = seasonLength * 4;
+
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
   textFont('Verdana'); 
   rectMode(CENTER);
   textSize(24);
 
-  let seasonLength = 500; // frames per season
-  let totalCycle = seasonLength * 4;
   let cyclePos = counter % totalCycle;
-
   let seasonIndex = floor(cyclePos / seasonLength); // 0=Winter,1=Spring,2=Summer,3=Autumn
-  let t = (cyclePos % seasonLength) / seasonLength;
+  let nextIndex = (seasonIndex + 1) % 4;
+  let t = (cyclePos % seasonLength) / seasonLength; // transition factor 0→1
 
   // season gradient colors
   let topColors = [
-    color(160, 200, 255),
-    color(255, 170, 200),
-    color(120, 200, 255),
-    color(230, 150, 80)
+    color(160, 200, 255), // winter top
+    color(255, 170, 200), // spring top
+    color(120, 200, 255), // summer top
+    color(230, 150, 80)   // autumn top
   ];
   let bottomColors = [
-    color(240, 250, 255),
-    color(180, 250, 200),
-    color(255, 220, 130),
-    color(160, 60, 30)
+    color(240, 250, 255), // winter bottom
+    color(180, 250, 200), // spring bottom
+    color(255, 220, 130), // summer bottom
+    color(160, 60, 30)    // autumn bottom
   ];
 
-  let nextIndex = (seasonIndex + 1) % 4;
+  // smoothly fade gradient to next season
   let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t);
   let c2 = lerpColor(bottomColors[seasonIndex], bottomColors[nextIndex], t);
 
   setGradient(c1, c2);
 
 
-  if (seasonIndex === 1 || seasonIndex === 2) {
-    drawSun(bass, vocal, drum, other);
-  }
+  //if (seasonIndex === 1 || seasonIndex === 2) {
+    drawSun( vocal);
+ //}
 
 
   drawTree(); // tree in middle
@@ -46,9 +48,9 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     drawSnow();
   }
 
-
-
-}
+  if (seasonIndex === 1)
+    drawFlower();
+ }
 
 // gradient background
 function setGradient(c1, c2) {
@@ -88,11 +90,41 @@ function drawSnow() {
   }
 }
 
+
+
+function drawFlower() {
+  noStroke();
+  fill(255, 170, 200);
+
+  for (let i = 0; i < 4; i++) {
+    flower.push({
+      x: random(width),
+      y: random(-20, 0),
+      size: random(2, 6),
+      speed: random(1, 3),
+      sway: random(0.5, 2),
+      offset: random(TWO_PI)
+    });
+  }
+
+  for (let i = snowflakes.length - 1; i >= 0; i--) {
+    let flake = snowflakes[i];
+    if (flake.y > height) {
+      snowflakes.splice(i, 1);
+      continue;
+    }
+    let x = flake.x + sin(frameCount * 0.01 * flake.sway + flake.offset) * 5;
+    ellipse(x, flake.y, flake.size);
+    flake.y += flake.speed;
+  }
+}
+
+
 // sun drawing
-function drawSun(bass, vocal, drum, other) {
+function drawSun( vocal) {
   push();
   translate(width / 2, height / 5.5);
-  let sunSize = map(bass, 0, 150, 100, 230);
+  let sunSize = map(vocal, 0, 150, 100, 230);
   let glowSize = sunSize * map(vocal, 0, 100, 1.3, 1.8);
 
   noStroke();
