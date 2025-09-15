@@ -3,6 +3,8 @@ let flower = [];
 let greenleave = [];
 let autumnLeaves = []
 
+let vocal = 70; // simulate drum volume
+
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
 let seasonLength = 1000; // longer seasons
@@ -41,7 +43,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
 
   //if (seasonIndex === 1 || seasonIndex === 2) {
-    drawSun( vocal);
+    drawSun( drum);
  //}
 
 
@@ -62,6 +64,19 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   drawAutumnLeaves();
  }
 
+ drawEnd(100, 330, vocal);
+drawEnd(145, 330, vocal);
+drawEnd(140, 229, vocal);
+drawEnd(175, 235, vocal);
+drawEnd(240, 235, vocal);
+drawEnd(290, 275, vocal);
+drawEnd(340, 345, vocal);
+drawEnd(415, 280, vocal);
+drawEnd(450, 380, vocal);
+
+
+
+
 
 // gradient background
 function setGradient(c1, c2) {
@@ -78,7 +93,7 @@ function drawSnow() {
   noStroke();
   fill(255, 255, 255, 200);
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     snowflakes.push({
       x: random(width),
       y: random(-20, 0),
@@ -107,7 +122,7 @@ function drawFlower() {
   noStroke();
   fill(255, 170, 200);
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     flower.push({
       x: random(width),
       y: random(-20, 0),
@@ -135,7 +150,7 @@ function drawGreenLeaves() {
   noStroke();
   fill(79, 121, 66);
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     greenleave.push({
       x: random(width),
       y: random(-20, 0),
@@ -164,7 +179,7 @@ function drawAutumnLeaves() {
   noStroke();
   fill(255, 140, 0); // dark orange
 
-  for (let i = 0; i < 2; i++) {
+  for (let i = 0; i < 1; i++) {
     autumnLeaves.push({
       x: random(width),
       y: random(-20, 0),
@@ -189,11 +204,11 @@ function drawAutumnLeaves() {
 }
 
 // sun drawing
-function drawSun( vocal) {
+function drawSun( drum) {
   push();
   translate(width / 2, height / 5.5);
-  let sunSize = map(vocal, 0, 150, 100, 230);
-  let glowSize = sunSize * map(vocal, 0, 100, 1.3, 1.8);
+  let sunSize = map(drum, 0, 150, 100, 230);
+  let glowSize = sunSize * map(drum, 0, 100, 1.3, 1.8);
 
   noStroke();
   for (let i = 6; i > 0; i--) {
@@ -206,6 +221,29 @@ function drawSun( vocal) {
   }
   pop();
 }
+
+function drawEnd(x, y, vocal) {
+  // Map drum volume (0–100) to petal size
+  let basePetalSize = map(vocal, 0, 100, 10,30); // smaller at 0, bigger at 100
+
+  push();
+  translate(x, y);
+
+  noStroke();
+  fill(255, 100, 0); // petals
+  ellipse(0, -basePetalSize / 2, basePetalSize, basePetalSize); // Top
+  ellipse(0, basePetalSize / 2, basePetalSize, basePetalSize);  // Bottom
+  ellipse(-basePetalSize / 2, 0, basePetalSize, basePetalSize); // Left
+  ellipse(basePetalSize / 2, 0, basePetalSize, basePetalSize);  // Right
+
+  fill(255, 204, 0); // center
+  circle(0, 0, basePetalSize / 2);
+
+  pop();
+}
+
+
+
 
 
 // tree structure
