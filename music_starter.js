@@ -1,9 +1,10 @@
 let snowflakes = [];
 let flower = [];
+let greenleave = [];
 
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
-let seasonLength = 1000; // frames per season
+let seasonLength = 1000; // longer seasons
 let totalCycle = seasonLength * 4;
 
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
@@ -13,10 +14,9 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   let cyclePos = counter % totalCycle;
   let seasonIndex = floor(cyclePos / seasonLength); // 0=Winter,1=Spring,2=Summer,3=Autumn
-  let nextIndex = (seasonIndex + 1) % 4;
-  let t = (cyclePos % seasonLength) / seasonLength; // transition factor 0→1
+  let t = (cyclePos % seasonLength) / seasonLength; // 0 → 1 for transition
 
-  // season gradient colors
+  // gradient colors for each season
   let topColors = [
     color(160, 200, 255), // winter top
     color(255, 170, 200), // spring top
@@ -30,8 +30,10 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     color(160, 60, 30)    // autumn bottom
   ];
 
-  // smoothly fade gradient to next season
-  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t);
+  let nextIndex = (seasonIndex + 1) % 4;
+
+  // smooth transition between current and next season
+  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t * 0.9); // slow subtle transition
   let c2 = lerpColor(bottomColors[seasonIndex], bottomColors[nextIndex], t);
 
   setGradient(c1, c2);
@@ -48,9 +50,14 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     drawSnow();
   }
 
-  if (seasonIndex === 1)
+  if (seasonIndex === 1){
     drawFlower();
  }
+
+ if (seasonIndex === 2){
+  drawGreenLeaves();
+ }
+
 
 // gradient background
 function setGradient(c1, c2) {
@@ -67,7 +74,7 @@ function drawSnow() {
   noStroke();
   fill(255, 255, 255, 200);
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 2; i++) {
     snowflakes.push({
       x: random(width),
       y: random(-20, 0),
@@ -96,7 +103,7 @@ function drawFlower() {
   noStroke();
   fill(255, 170, 200);
 
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 2; i++) {
     flower.push({
       x: random(width),
       y: random(-20, 0),
@@ -107,19 +114,46 @@ function drawFlower() {
     });
   }
 
-  for (let i = snowflakes.length - 1; i >= 0; i--) {
-    let flake = snowflakes[i];
-    if (flake.y > height) {
-      snowflakes.splice(i, 1);
+  // draw the flower array, not snowflakes
+  for (let i = flower.length - 1; i >= 0; i--) {
+    let f = flower[i];
+    if (f.y > height) {
+      flower.splice(i, 1);
       continue;
     }
-    let x = flake.x + sin(frameCount * 0.01 * flake.sway + flake.offset) * 5;
-    ellipse(x, flake.y, flake.size);
-    flake.y += flake.speed;
+    let x = f.x + sin(frameCount * 0.01 * f.sway + f.offset) * 5;
+    ellipse(x, f.y, f.size);
+    f.y += f.speed;
   }
 }
 
+function drawGreenLeaves() {
+  noStroke();
+  fill(79, 121, 66);
 
+  for (let i = 0; i < 2; i++) {
+    greenleave.push({
+      x: random(width),
+      y: random(-20, 0),
+      size: random(2, 6),
+      speed: random(1, 3),
+      sway: random(0.5, 2),
+      offset: random(TWO_PI)
+    });
+  }
+
+  // draw the greenleave array
+  for (let i = greenleave.length - 1; i >= 0; i--) {
+    let leaf = greenleave[i];
+    if (leaf.y > height) {
+      greenleave.splice(i, 1);
+      continue;
+    }
+    let x = leaf.x + sin(frameCount * 0.01 * leaf.sway + leaf.offset) * 5;
+    ellipse(x, leaf.y, leaf.size);
+    leaf.y += leaf.speed;
+  }
+}
 // sun drawing
 function drawSun( vocal) {
   push();
@@ -182,4 +216,4 @@ function drawTree() {
 
 
 
-  
+}
