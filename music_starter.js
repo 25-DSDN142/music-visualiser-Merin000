@@ -1,6 +1,7 @@
 let snowflakes = [];
 let flower = [];
 let greenleave = [];
+let autumnLeaves = []
 
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
@@ -33,8 +34,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   let nextIndex = (seasonIndex + 1) % 4;
 
   // smooth transition between current and next season
-  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t * 0.9); // slow subtle transition
-  let c2 = lerpColor(bottomColors[seasonIndex], bottomColors[nextIndex], t);
+  let c1 = lerpColor(topColors[seasonIndex], topColors[nextIndex], t * 0.3); // slow subtle transition
+  let c2 = lerpColor(bottomColors[seasonIndex], bottomColors[nextIndex], t* 0.3);
 
   setGradient(c1, c2);
 
@@ -56,6 +57,9 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
  if (seasonIndex === 2){
   drawGreenLeaves();
+ }
+ if (seasonIndex === 3){
+  drawAutumnLeaves();
  }
 
 
@@ -154,6 +158,36 @@ function drawGreenLeaves() {
     leaf.y += leaf.speed;
   }
 }
+
+
+function drawAutumnLeaves() {
+  noStroke();
+  fill(255, 140, 0); // dark orange
+
+  for (let i = 0; i < 2; i++) {
+    autumnLeaves.push({
+      x: random(width),
+      y: random(-20, 0),
+      size: random(2, 6),
+      speed: random(1, 3),
+      sway: random(0.5, 2),
+      offset: random(TWO_PI)
+    });
+  }
+
+  // draw the autumnLeaves array
+  for (let i = autumnLeaves.length - 1; i >= 0; i--) {
+    let leaf = autumnLeaves[i];
+    if (leaf.y > height) {
+      autumnLeaves.splice(i, 1);
+      continue;
+    }
+    let x = leaf.x + sin(frameCount * 0.01 * leaf.sway + leaf.offset) * 5;
+    ellipse(x, leaf.y, leaf.size);
+    leaf.y += leaf.speed;
+  }
+}
+
 // sun drawing
 function drawSun( vocal) {
   push();
